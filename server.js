@@ -14,24 +14,27 @@ app.use(express.static("public"));
 // app.use("/", htmlRoutes);
 
 app.get('/notes', (req, res) => {
-    res.sendFiles(path.join(__dirname,'./public/notes.html'));
+    res.sendFile(path.join(__dirname,'./public/notes.html'));
+})
+
+app.get('/api/notes', (req, res) => {
+    res.sendFile(path.join(__dirname,'./db/db.json'));
 })
 
 app.get('*', (req, res) => {
-    res.sendFiles(path.join(__dirname,'./public/notes.html'));
+    res.sendFile(path.join(__dirname,'./public/notes.html'));
 })
 
-app.post('/api/notes', function(req, res,){
-    const newnotes = req.body
-    newId.id=Date.now()
-    const data = fs.readFileSync(req, res,)
-    const json = JSON.parse(data)
-    json.push(newnotes)
-    fs.writeFileSync('./db/db.json', JSON.stringify(json),
-    response.send())
-
-});
+app.post('/api/notes', function(req, res){
+        const newnotes = req.body
+        const data = fs.readFileSync('./db/db.json')
+        const json = JSON.parse(data)
+        newnotes.id = Date.now()
+        json.push(newnotes);
+        fs.writeFileSync('./db/db.json', JSON.stringify(json))
+        res.send()
+    })
 
 app.listen(3000, function() {
     console.log('you listen on this port?')
-});
+})
